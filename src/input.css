@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased text-gray-800 bg-gray-50;
+  }
+}
+
+@layer components {
+
+  /* Default styling for WP Nav Menus (if walker is off) */
+  #site-navigation ul li a {
+    @apply hover:text-secondary transition duration-300;
+  }
+
+  /* Desktop mega/dropdown spacing polish */
+  #primary-menu > li.menu-item-has-children > a {
+    @apply relative;
+  }
+
+  #primary-menu > li.menu-item-has-children > a::after {
+    content: "";
+    @apply absolute -bottom-3 left-0 right-0 h-3;
+  }
+
+  #primary-menu>li>.sub-menu {
+    transform-origin: top center;
+  }
+
+  #primary-menu>li>.sub-menu>li>a {
+    @apply whitespace-normal;
+  }
+
+  /* Dedicated mobile walker styles */
+  #mobile-primary-menu .menu-item-has-children>.flex>a {
+    @apply pr-1;
+  }
+
+  #mobile-primary-menu .mobile-submenu .menu-item a {
+    @apply text-[15px] py-2.5 text-gray-600;
+  }
+
+  #mobile-primary-menu .mobile-submenu-toggle[aria-expanded="true"] .mobile-submenu-icon {
+    @apply rotate-180 text-primary;
+  }
+}

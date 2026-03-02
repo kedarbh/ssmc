@@ -1,0 +1,24 @@
+/*
+Theme Name: SSMC Custom Theme
+Theme URI: https://ssmcchitwan.edu.np/
+Author: Kedar Bhusal
+Author URI: https://ssmcchitwan.edu.np/
+Description: A custom, lightweight, professional and playful theme built specifically for Shaheed Smriti Multiple Campus, Chitwan. Built with minimal plugins for maximum performance and security.
+Version: 1.0.0
+Text Domain: ssmc-custom
+*/
+
+/* Reset & Foundation CSS will go here */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+    background-color: #f9fafb;
+}
+
+/* 
+* Lesson 1: Theme Stylesheet
+* This is the main stylesheet for your WordPress theme. 
+* The comment block at the very top is REQUIRED. WordPress reads that block 
+* to know the name, author, and description of your theme in the Appearance -> Themes menu.
+*/

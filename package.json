@@ -1,0 +1,16 @@
+{
+  "name": "ssmc-custom",
+  "version": "1.0.0",
+  "description": "Custom Tailwind theme for SSMC.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx tailwindcss -i ./src/input.css -o ./assets/css/tailwind.css --watch",
+    "build": "npx tailwindcss -i ./src/input.css -o ./assets/css/tailwind.css --minify"
+  },
+  "keywords": [],
+  "author": "Kedar Bhusal",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}
