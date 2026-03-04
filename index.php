@@ -13,7 +13,16 @@
 get_header(); // This includes the header.php file
 ?>
 
-<main id="primary" class="site-main">
+<!-- Fallback Header -->
+<div class="bg-gradient-to-br from-primary via-primary to-blue-900 py-12 relative overflow-hidden">
+    <div class="container mx-auto px-4 relative z-10">
+        <h1 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight">SSMC Chitwan</h1>
+    </div>
+</div>
+
+<main id="primary" class="py-16 md:py-24 bg-gray-50 min-h-[40vh]">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-16">
 
 	<?php
 	// Lesson 3: The WordPress Loop
@@ -44,6 +53,8 @@ get_header(); // This includes the header.php file
 	endif;
 	?>
 
+        </div>
+    </div>
 </main>
 
 <?php

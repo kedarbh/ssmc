@@ -10,19 +10,26 @@ $depts = get_the_terms( get_the_ID(), 'department' );
 $dept_name = ( $depts && ! is_wp_error( $depts ) ) ? $depts[0]->name : 'Program';
 ?>
 
-<div class="bg-primary py-10">
-    <div class="container mx-auto px-4">
-        <div class="flex items-center gap-2 text-blue-200 text-sm mb-3">
-            <a href="<?php echo esc_url( home_url('/') ); ?>" class="hover:text-white transition">Home</a>
-            <span>/</span>
-            <a href="<?php echo esc_url( get_post_type_archive_link('program') ); ?>" class="hover:text-white transition">Programs</a>
-            <span>/</span>
-            <span class="text-white truncate"><?php the_title(); ?></span>
+<div class="bg-gradient-to-br from-primary via-primary to-blue-900 py-12 relative overflow-hidden">
+    <!-- Decorative background elements -->
+    <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-48 h-48 bg-secondary/10 rounded-full translate-y-1/2 -translate-x-1/3 blur-2xl pointer-events-none"></div>
+
+    <div class="container mx-auto px-4 relative z-10">
+        <nav class="flex items-center gap-2 text-blue-200/80 text-xs mb-4 font-medium uppercase tracking-widest">
+            <a href="<?php echo esc_url( home_url('/') ); ?>" class="hover:text-white transition-colors duration-200">Home</a>
+            <span class="opacity-40">/</span>
+            <a href="<?php echo esc_url( get_post_type_archive_link('program') ); ?>" class="hover:text-white transition-colors duration-200">Programs</a>
+            <span class="opacity-40">/</span>
+            <span class="text-white truncate max-w-[200px]"><?php the_title(); ?></span>
+        </nav>
+        
+        <div class="max-w-4xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary text-primary text-[10px] font-extrabold uppercase tracking-widest mb-4 shadow-lg shadow-black/10">
+                <?php echo esc_html( $dept_name ); ?> Department
+            </div>
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight mb-6"><?php the_title(); ?></h1>
         </div>
-        <div class="flex flex-wrap items-center gap-3 mb-3">
-            <span class="bg-secondary text-primary font-bold text-xs px-3 py-1 rounded-full"><?php echo esc_html( $dept_name ); ?></span>
-        </div>
-        <h1 class="text-2xl md:text-4xl font-extrabold text-white max-w-3xl"><?php the_title(); ?></h1>
     </div>
 </div>
 
@@ -31,36 +38,49 @@ $dept_name = ( $depts && ! is_wp_error( $depts ) ) ? $depts[0]->name : 'Program'
         <div class="flex flex-col lg:flex-row gap-8">
 
             <!-- Main Content -->
-            <article class="flex-1 bg-white rounded-xl shadow-sm border border-gray-100 p-8 md:p-10">
+            <article class="flex-1 bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-12">
                 <?php if ( has_post_thumbnail() ) : ?>
-                    <div class="mb-8 rounded-xl overflow-hidden shadow-md">
+                    <div class="mb-10 rounded-2xl overflow-hidden shadow-lg border border-gray-100">
                         <?php the_post_thumbnail('large', array('class' => 'w-full h-auto object-cover')); ?>
                     </div>
                 <?php endif; ?>
 
-                <div class="prose prose-gray max-w-none text-gray-700 leading-relaxed">
+                <div class="prose prose-blue max-w-none text-gray-700 leading-relaxed font-light prose-headings:font-extrabold prose-headings:text-gray-900 prose-p:mb-6">
                     <?php the_content(); ?>
                 </div>
             </article>
 
             <!-- Sidebar -->
-            <aside class="lg:w-72 flex-shrink-0 space-y-6">
+            <aside class="lg:w-80 flex-shrink-0 space-y-6">
                 <!-- Quick Info Box -->
-                <div class="bg-gradient-to-br from-primary to-blue-900 text-white rounded-xl p-6 shadow-inner">
-                    <h3 class="font-bold text-lg mb-4 border-b border-white/20 pb-3">Program Info</h3>
-                    <ul class="space-y-3 text-sm text-blue-100">
-                        <li class="flex gap-2 items-start"><span>🎓</span> <span><?php echo esc_html( $dept_name ); ?> Faculty</span></li>
-                        <li class="flex gap-2 items-start"><span>📅</span> <span>4-Year Program</span></li>
-                        <li class="flex gap-2 items-start"><span>🏛️</span> <span>Affiliated to Tribhuvan University</span></li>
+                <div class="bg-gradient-to-br from-primary to-blue-900 text-white rounded-2xl p-8 shadow-xl shadow-primary/20 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-bl-full pointer-events-none translate-x-4 -translate-y-4"></div>
+                    
+                    <h3 class="font-extrabold text-xl mb-6 relative z-10">Program Details</h3>
+                    <ul class="space-y-4 text-sm text-blue-100/90 relative z-10">
+                        <li class="flex gap-3 items-center">
+                            <span class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-lg">🎓</span> 
+                            <span><?php echo esc_html( $dept_name ); ?> Department</span>
+                        </li>
+                        <li class="flex gap-3 items-center">
+                            <span class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-lg">📅</span> 
+                            <span>4-Year Duration</span>
+                        </li>
+                        <li class="flex gap-3 items-center">
+                            <span class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-lg">🏛️</span> 
+                            <span class="leading-snug text-xs">Affiliated to Tribhuvan University</span>
+                        </li>
                     </ul>
-                    <a href="#" class="mt-6 inline-block w-full bg-secondary text-primary font-semibold text-center py-2.5 rounded-lg hover:bg-yellow-400 transition text-sm shadow hover:-translate-y-0.5">
+                    <a href="#" class="mt-8 inline-flex w-full items-center justify-center bg-secondary text-primary font-extrabold text-center py-4 rounded-xl hover:bg-yellow-400 transition-all duration-300 text-xs uppercase tracking-widest shadow-lg shadow-black/10 hover:-translate-y-1 relative z-10">
                         Apply Now
                     </a>
                 </div>
 
                 <!-- Other Programs -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="font-bold text-gray-800 mb-4 pb-3 border-b border-gray-100">Other Programs</h3>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 overflow-hidden relative group/sidebar">
+                     <div class="absolute top-0 right-0 w-16 h-16 bg-primary/5 rounded-bl-full pointer-events-none translate-x-2 -translate-y-2"></div>
+                    
+                    <h3 class="font-extrabold text-gray-900 mb-6 pb-4 border-b border-gray-100 relative z-10 leading-tight">Similar Programs</h3>
                     <?php
                     $related = new WP_Query( array(
                         'post_type'      => 'program',
@@ -68,24 +88,23 @@ $dept_name = ( $depts && ! is_wp_error( $depts ) ) ? $depts[0]->name : 'Program'
                         'post__not_in'   => array( get_the_ID() ),
                     ) );
                     if ( $related->have_posts() ) : ?>
-                        <ul class="space-y-3">
+                        <ul class="space-y-4 relative z-10">
                         <?php while ( $related->have_posts() ) : $related->the_post(); ?>
-                            <li class="pb-3 border-b border-gray-50 last:border-0">
-                                <a href="<?php the_permalink(); ?>" class="group flex items-center gap-2">
-                                    <span class="text-primary">🎓</span>
-                                    <span class="text-sm font-medium text-gray-700 group-hover:text-primary transition"><?php the_title(); ?></span>
+                            <li>
+                                <a href="<?php the_permalink(); ?>" class="group/item flex items-center gap-3">
+                                    <span class="w-6 h-6 rounded bg-primary/5 text-primary flex items-center justify-center text-[10px] group-hover/item:bg-primary group-hover/item:text-white transition-colors">🎓</span>
+                                    <span class="text-xs font-bold text-gray-700 group-hover/item:text-primary transition-colors leading-tight"><?php the_title(); ?></span>
                                 </a>
                             </li>
                         <?php endwhile; wp_reset_postdata(); ?>
                         </ul>
-                    <?php else : ?>
-                        <p class="text-sm text-gray-400">No other programs found.</p>
                     <?php endif; ?>
                 </div>
 
                 <a href="<?php echo esc_url( get_post_type_archive_link('program') ); ?>"
-                   class="inline-block bg-primary text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-800 transition shadow hover:-translate-y-0.5 w-full text-center">
-                    &larr; All Programs
+                   class="inline-flex items-center justify-center gap-2 bg-gray-100 text-gray-600 font-bold px-6 py-4 rounded-xl hover:bg-gray-200 transition-all duration-300 w-full text-xs uppercase tracking-widest">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    View All Programs
                 </a>
             </aside>
         </div>

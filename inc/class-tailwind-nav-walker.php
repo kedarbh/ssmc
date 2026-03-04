@@ -38,28 +38,30 @@ class Tailwind_Nav_Walker extends Walker_Nav_Menu {
             $hl_link_text = get_post_meta( $item_id, '_mega_menu_highlight_link_text', true ) ?: 'Learn More';
             $hl_link_url = get_post_meta( $item_id, '_mega_menu_highlight_link_url', true ) ?: '#';
 
-			// Smarter Mega Menu: Grid layout with a highlight panel and link columns
-				$classes = 'sub-menu absolute left-1/2 top-full z-50 invisible w-[min(900px,calc(100vw-2rem))] -translate-x-1/2 overflow-hidden rounded-2xl border border-gray-100/50 bg-white/95 backdrop-blur-md shadow-2xl ring-1 ring-black/5 flex opacity-0 translate-y-3 pointer-events-none transition-all duration-300 ease-out group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto';
+			// Smarter Mega Menu: Align to the right of the parent item for a more "connected" feel
+				$classes = 'sub-menu absolute right-0 top-full z-50 invisible w-[min(900px,calc(100vw-2rem))] overflow-hidden rounded-b-2xl rounded-t-none border border-t-0 border-gray-100/50 bg-white/95 backdrop-blur-md shadow-2xl flex opacity-0 origin-top scale-95 pointer-events-none transition-all duration-300 ease-out group-hover:visible group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100 group-focus-within:scale-100 group-focus-within:pointer-events-auto';
 			
 			$output .= "\n$indent<div class=\"" . esc_attr( $classes ) . "\">\n";
 
             // Add a visual 'highlight' or 'featured' sidebar area to the mega menu
             $output .= "$indent\t<div class=\"w-1/3 bg-gray-50 p-8 border-r border-gray-100 hidden md:flex md:flex-col justify-center relative z-10\">\n";
-            $output .= "$indent\t\t<div class=\"bg-white w-12 h-12 rounded-full flex items-center justify-center mb-4 shadow-sm border border-gray-100 text-primary\"><svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4\"></path></svg></div>\n";
             $output .= "$indent\t\t<h3 class=\"text-gray-900 font-bold text-xl mb-2\">" . esc_html( $hl_title ) . "</h3>\n";
             $output .= "$indent\t\t<p class=\"text-gray-500 mb-6 leading-relaxed\">" . esc_html( $hl_text ) . "</p>\n";
             if ( $hl_link_url && $hl_link_text ) {
-                $output .= "$indent\t\t<a href=\"" . esc_url( $hl_link_url ) . "\" class=\"inline-flex items-center justify-center px-4 py-2 bg-primary text-white font-medium rounded-lg hover:bg-secondary transition-colors group/btn w-fit\">" . esc_html( $hl_link_text ) . " <svg class=\"w-4 h-4 ml-2 transition-transform group-hover/btn:translate-x-1\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17 8l4 4m0 0l-4 4m4-4H3\"></path></svg></a>\n";
+                $output .= "$indent\t\t<a href=\"" . esc_url( $hl_link_url ) . "\" class=\"inline-flex items-center justify-center px-4 py-2 bg-primary text-white font-medium rounded-lg hover:bg-secondary hover:!text-white transition-colors group/btn w-fit\">" . esc_html( $hl_link_text ) . " <svg class=\"w-4 h-4 ml-2 transition-transform group-hover/btn:translate-x-1\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17 8l4 4m0 0l-4 4m4-4H3\"></path></svg></a>\n";
             }
             $output .= "$indent\t</div>\n";
 
             // Link columns wrapper
+            $cols = get_post_meta( $item_id, '_mega_menu_columns', true ) ?: 2;
+            $grid_class = 'sm:grid-cols-' . $cols;
+            
             $output .= "$indent\t<div class=\"w-full md:w-2/3 p-10 relative z-10\">\n";
-            $output .= "$indent\t\t<ul class=\"grid grid-cols-1 gap-8 sm:grid-cols-2\">\n";
+            $output .= "$indent\t\t<ul class=\"grid grid-cols-1 gap-8 {$grid_class}\">\n";
 
 			} elseif ( 0 === $depth ) {
 	            // Standard dropdown
-				$classes = 'sub-menu absolute left-0 top-[calc(100%-2px)] z-50 min-w-[240px] rounded-xl border border-gray-100/50 bg-white/95 backdrop-blur-md py-2 shadow-xl ring-1 ring-black/5 block opacity-0 invisible translate-y-3 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:pointer-events-auto';
+				$classes = 'sub-menu absolute left-0 top-full z-50 min-w-[240px] rounded-b-xl rounded-t-none border border-t-0 border-gray-100/50 bg-white/95 backdrop-blur-md py-2 shadow-xl block opacity-0 invisible origin-top scale-95 pointer-events-none transition-all duration-300 ease-out group-hover:opacity-100 group-hover:visible group-hover:scale-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:visible group-focus-within:scale-100 group-focus-within:pointer-events-auto';
 	            $output .= "\n$indent<ul class=\"" . esc_attr( $classes ) . "\">\n";
 		} elseif ( $is_mega ) {
             // Lists inside mega menu columns
@@ -103,7 +105,7 @@ class Tailwind_Nav_Walker extends Walker_Nav_Menu {
 
 			if ( 0 === $depth ) {
 	            // Top level
-				$classes[] = $is_mega ? 'static' : 'relative';
+				$classes[] = 'relative';
 				$classes[] = 'group';
 		} elseif ( $is_mega && 1 === $depth ) {
             // Mega menu column wrappers (could be a header with children, or just a direct link)
@@ -130,15 +132,10 @@ class Tailwind_Nav_Walker extends Walker_Nav_Menu {
 		$a_classes = '';
 		if ( 0 === $depth ) {
             // Top level link
-			$a_classes = 'inline-flex items-center gap-1 px-4 py-6 text-sm font-semibold text-gray-700 transition duration-300 hover:text-primary focus-visible:outline-none focus-visible:text-primary relative before:absolute before:bottom-0 before:left-4 before:right-4 before:h-1 before:bg-primary before:rounded-t-md before:opacity-0 hover:before:opacity-100 before:transition-opacity';
+			$a_classes = 'inline-flex items-center gap-1 px-4 text-sm font-semibold text-gray-700 transition duration-300 hover:text-primary focus-visible:outline-none focus-visible:text-primary h-full';
 		} elseif ( $is_mega && 1 === $depth ) {
             // Column Header
 			$a_classes = 'inline-flex items-center gap-2 pb-3 mb-2 border-b border-gray-100 text-sm font-bold tracking-wide text-primary w-full';
-            
-            // Re-adding a clean indicator for headers if they have children
-            if($has_children) {
-                 $item->title = $item->title . '<span class="text-secondary/50 flex-grow text-right mb-0.5">•</span>';
-            }
 		} elseif ( $is_mega ) {
             // Link inside column
 			$a_classes = 'flex items-center gap-3 text-[15px] font-medium text-gray-600 transition duration-200 hover:text-primary hover:translate-x-1';

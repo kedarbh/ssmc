@@ -23,24 +23,48 @@
 
 	<header id="masthead" class="bg-white shadow-sm sticky top-0 z-50">
         <!-- Top Bar for Contact Info -->
-        <div class="bg-primary text-white py-2 px-4 shadow-inner">
-            <div class="container mx-auto flex justify-between items-center text-sm">
-                <div>
-                    <span class="mr-4">📞 +977-56-000000</span>
-                    <span>✉️ info@ssmcchitwan.edu.np</span>
+        <div class="bg-primary text-white py-2 px-4 shadow-inner relative z-20">
+            <div class="container mx-auto flex justify-between items-center text-sm h-6">
+                <div class="flex items-center flex-grow overflow-hidden mr-6">
+                    <span class="bg-secondary text-primary font-bold px-3 py-0.5 rounded-sm text-xs uppercase tracking-wider whitespace-nowrap z-10 relative">Updates</span>
+                    
+                    <div class="flex-grow overflow-hidden relative ml-3 h-full flex items-center">
+                        <?php
+                        $notice_args = array(
+                            'post_type'      => 'notice',
+                            'posts_per_page' => 5,
+                            'post_status'    => 'publish',
+                        );
+                        $notice_query = new WP_Query( $notice_args );
+
+                        if ( $notice_query->have_posts() ) : ?>
+                            <div class="animate-ticker space-x-8">
+                                <?php while ( $notice_query->have_posts() ) : $notice_query->the_post(); ?>
+                                    <a href="<?php the_permalink(); ?>" class="hover:text-secondary transition hover:underline">
+                                        <?php echo '<span class="text-secondary/70 mr-1">•</span> ' . get_the_title(); ?>
+                                    </a>
+                                <?php endwhile; wp_reset_postdata(); ?>
+                            </div>
+                        <?php else : ?>
+                            <div class="text-gray-300 italic text-xs ml-4">No recent updates.</div>
+                        <?php endif; ?>
+                    </div>
                 </div>
-                <div>
-                    <a href="#" class="hover:text-secondary transition">Student Login</a>
+                <div class="shrink-0">
+                    <a href="#" class="hover:text-secondary transition font-medium flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                        Student Login
+                    </a>
                 </div>
             </div>
         </div>
 
         <!-- Main Navigation Header -->
-		<div class="container mx-auto px-4 py-4 flex justify-between items-center">
-			<div class="site-branding flex items-center gap-4">
-                <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xl">
-                    S
-                </div>
+		<div class="container mx-auto px-4 flex justify-between items-stretch">
+			<div class="site-branding flex items-center gap-4 py-4">
+                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" class="shrink-0 flex items-center">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.svg" alt="<?php bloginfo( 'name' ); ?> Logo" class="h-16 w-auto" />
+                </a>
 				<div>
                     <h1 class="text-2xl font-bold text-primary m-0 leading-tight">
                         <a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" class="hover:text-secondary transition"><?php bloginfo( 'name' ); ?></a>
@@ -54,14 +78,14 @@
 	                </div>
 				</div>
 
-				<nav id="site-navigation" class="hidden lg:flex lg:items-center relative" aria-label="<?php esc_attr_e( 'Primary Menu', 'ssmc-custom' ); ?>">
+				<nav id="site-navigation" class="hidden lg:flex lg:items-stretch" aria-label="<?php esc_attr_e( 'Primary Menu', 'ssmc-custom' ); ?>">
 					<?php
 					wp_nav_menu(
 						array(
 							'theme_location' => 'primary',
 							'menu_id'        => 'primary-menu',
-	                        'container_class' => 'flex items-center',
-	                        'menu_class' => 'flex gap-6 font-medium text-gray-700 items-center',
+	                        'container_class' => 'flex items-stretch',
+	                        'menu_class' => 'flex gap-2 font-medium text-gray-700 items-stretch',
 	                        'fallback_cb' => 'ssmc_custom_primary_menu_fallback',
 	                        'walker' => new Tailwind_Nav_Walker(),
 						)
@@ -69,7 +93,7 @@
 					?>
 				</nav>
 
-	            <button id="mobile-menu-toggle" class="lg:hidden text-primary focus:outline-none focus:ring-2 focus:ring-secondary rounded-md p-2" aria-controls="mobile-menu" aria-expanded="false" aria-label="<?php esc_attr_e( 'Toggle menu', 'ssmc-custom' ); ?>">
+	            <button id="mobile-menu-toggle" class="lg:hidden text-primary focus:outline-none focus:ring-2 focus:ring-secondary rounded-md p-2 my-4" aria-controls="mobile-menu" aria-expanded="false" aria-label="<?php esc_attr_e( 'Toggle menu', 'ssmc-custom' ); ?>">
 	                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
 	            </button>
 			</div>

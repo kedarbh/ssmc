@@ -16,11 +16,11 @@
   }
 
   /* Desktop mega/dropdown spacing polish */
-  #primary-menu > li.menu-item-has-children > a {
+  #primary-menu>li.menu-item-has-children>a {
     @apply relative;
   }
 
-  #primary-menu > li.menu-item-has-children > a::after {
+  #primary-menu>li.menu-item-has-children>a::after {
     content: "";
     @apply absolute -bottom-3 left-0 right-0 h-3;
   }
@@ -44,5 +44,26 @@
 
   #mobile-primary-menu .mobile-submenu-toggle[aria-expanded="true"] .mobile-submenu-icon {
     @apply rotate-180 text-primary;
+  }
+
+  /* News Ticker Animation */
+  @keyframes ticker {
+    0% {
+      transform: translateX(100%);
+    }
+
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  .animate-ticker {
+    animation: ticker 25s linear infinite;
+    display: inline-flex;
+    white-space: nowrap;
+  }
+
+  .animate-ticker:hover {
+    animation-play-state: paused;
   }
 }

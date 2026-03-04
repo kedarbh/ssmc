@@ -78,11 +78,44 @@ add_filter( 'excerpt_more', 'ssmc_custom_excerpt_more' );
  * Fallback for primary menu if not assigned
  */
 function ssmc_custom_primary_menu_fallback() {
-    echo '<ul id="primary-menu" class="flex flex-wrap items-center gap-6 font-medium text-gray-700">';
-    wp_list_pages( array(
-        'title_li' => '',
-        'depth'    => 1,
-    ) );
+    echo '<ul id="primary-menu" class="flex items-center gap-8 font-bold text-gray-700 uppercase text-xs tracking-widest">';
+    echo '<li><a href="' . esc_url( home_url( '/' ) ) . '" class="hover:text-primary transition py-8 flex items-center">' . esc_html__( 'Home', 'ssmc-custom' ) . '</a></li>';
+    
+    // Academics Dynamic Menu
+    echo '<li class="relative group h-full flex items-center">';
+    echo '<a href="#" class="hover:text-primary transition py-8 flex items-center gap-1">' . esc_html__( 'Academics', 'ssmc-custom' ) . ' <svg class="w-3 h-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></a>';
+    
+    echo '<div class="absolute top-full left-0 w-64 bg-white shadow-2xl rounded-b-2xl border-t-2 border-primary opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 py-4 transform translate-y-2 group-hover:translate-y-0">';
+    
+    // 1. Departments Submenu
+    echo '<div class="px-6 py-2 border-b border-gray-50 mb-2"><span class="text-[9px] text-gray-400">' . esc_html__( 'Departments', 'ssmc-custom' ) . '</span></div>';
+    $departments = get_terms( array( 'taxonomy' => 'department', 'hide_empty' => false ) );
+    if ( ! empty( $departments ) ) {
+        foreach ( $departments as $dept ) {
+            echo '<a href="' . esc_url( get_term_link( $dept ) ) . '" class="block px-6 py-2 hover:bg-gray-50 hover:text-primary transition text-[11px]">' . esc_html( $dept->name ) . '</a>';
+        }
+    }
+
+    // 2. Programs Submenu
+    echo '<div class="px-6 py-2 border-b border-gray-50 my-2"><span class="text-[9px] text-gray-400">' . esc_html__( 'Programs', 'ssmc-custom' ) . '</span></div>';
+    $programs = get_posts( array( 'post_type' => 'program', 'posts_per_page' => 5 ) );
+    foreach ( $programs as $prog ) {
+        echo '<a href="' . esc_url( get_permalink( $prog ) ) . '" class="block px-6 py-2 hover:bg-gray-50 hover:text-primary transition text-[11px]">' . esc_html( get_the_title( $prog ) ) . '</a>';
+    }
+
+    // 3. Cells Submenu
+    echo '<div class="px-6 py-2 border-b border-gray-50 my-2"><span class="text-[9px] text-gray-400">' . esc_html__( 'Campus Cells', 'ssmc-custom' ) . '</span></div>';
+    $cells = get_posts( array( 'post_type' => 'cell', 'posts_per_page' => 5 ) );
+    foreach ( $cells as $cell ) {
+        echo '<a href="' . esc_url( get_permalink( $cell ) ) . '" class="block px-6 py-2 hover:bg-gray-50 hover:text-primary transition text-[11px]">' . esc_html( get_the_title( $cell ) ) . '</a>';
+    }
+
+    echo '</div></li>';
+
+    echo '<li><a href="' . esc_url( home_url( '/notices' ) ) . '" class="hover:text-primary transition py-8 flex items-center">' . esc_html__( 'Notices', 'ssmc-custom' ) . '</a></li>';
+    echo '<li><a href="' . esc_url( home_url( '/faculty' ) ) . '" class="hover:text-primary transition py-8 flex items-center">' . esc_html__( 'Faculty', 'ssmc-custom' ) . '</a></li>';
+    echo '<li><a href="' . esc_url( home_url( '/about-us' ) ) . '" class="hover:text-primary transition py-8 flex items-center">' . esc_html__( 'About', 'ssmc-custom' ) . '</a></li>';
+    echo '<li><a href="' . esc_url( home_url( '/contact-us' ) ) . '" class="hover:text-primary transition py-8 flex items-center">' . esc_html__( 'Contact', 'ssmc-custom' ) . '</a></li>';
     echo '</ul>';
 }
 
@@ -102,6 +135,19 @@ function ssmc_custom_nav_mega_menu_field( $item_id, $item, $depth, $args ) {
             <label for="edit-menu-item-mega-menu-<?php echo esc_attr( $item_id ); ?>">
                 <input type="checkbox" id="edit-menu-item-mega-menu-<?php echo esc_attr( $item_id ); ?>" class="code edit-menu-item-mega-menu" name="menu-item-mega-menu[<?php echo esc_attr( $item_id ); ?>]" value="1" <?php checked( $is_mega, 1 ); ?> />
                 <strong><?php esc_html_e( 'Enable Mega Menu Layout', 'ssmc-custom' ); ?></strong>
+            </label>
+        </p>
+        <p class="field-mega-menu-columns description description-wide">
+            <label for="edit-menu-item-mega-columns-<?php echo esc_attr( $item_id ); ?>">
+                <?php esc_html_e( 'Number of Columns', 'ssmc-custom' ); ?><br>
+                <select id="edit-menu-item-mega-columns-<?php echo esc_attr( $item_id ); ?>" class="widefat" name="menu-item-mega-columns[<?php echo esc_attr( $item_id ); ?>]">
+                    <?php 
+                    $current_cols = get_post_meta( $item_id, '_mega_menu_columns', true ) ?: 2;
+                    for ( $i = 1; $i <= 4; $i++ ) {
+                        printf( '<option value="%d" %s>%d %s</option>', $i, selected( $current_cols, $i, false ), $i, _n( 'Column', 'Columns', $i, 'ssmc-custom' ) );
+                    }
+                    ?>
+                </select>
             </label>
         </p>
         <div class="mega-menu-highlight-fields" style="background:#f9f9f9; padding: 10px; margin-top: 10px; border: 1px solid #ddd;">
@@ -165,6 +211,10 @@ function ssmc_custom_nav_update( $menu_id, $menu_item_db_id, $args ) {
             delete_post_meta( $menu_item_db_id, $meta_key );
         }
     }
+
+    if ( isset( $_POST['menu-item-mega-columns'][$menu_item_db_id] ) ) {
+        update_post_meta( $menu_item_db_id, '_mega_menu_columns', intval( $_POST['menu-item-mega-columns'][$menu_item_db_id] ) );
+    }
 }
 add_action( 'wp_update_nav_menu_item', 'ssmc_custom_nav_update', 10, 3 );
 
@@ -182,3 +232,13 @@ require get_template_directory() . '/inc/class-tailwind-nav-walker.php';
  * Require Mobile Tailwind Nav Walker
  */
 require get_template_directory() . '/inc/class-mobile-nav-walker.php';
+
+/**
+ * Require Theme Customizer Settings
+ */
+require get_template_directory() . '/inc/customizer.php';
+
+/**
+ * Require Security Hardening
+ */
+require get_template_directory() . '/inc/security.php';

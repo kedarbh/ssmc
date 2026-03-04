@@ -11,7 +11,7 @@
 		<div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                 <div>
-                    <h3 class="text-xl font-bold mb-4 text-secondary">About SSMC</h3>
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.svg" alt="<?php bloginfo( 'name' ); ?> Logo" class="h-14 w-auto mb-4 bg-white p-2 rounded-lg" />
                     <p class="text-gray-400 text-sm leading-relaxed">
                         Shaheed Smriti Multiple Campus is a premier academic institution committed to academic excellence and nurturing future leaders.
                     </p>
