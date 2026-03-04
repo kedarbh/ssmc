@@ -8,7 +8,7 @@
 get_header(); ?>
 
 <!-- 1. Refined Premium Hero Section -->
-<section class="relative bg-primary overflow-hidden min-h-[85vh] flex items-center pt-24 pb-20">
+<section class="relative bg-primary overflow-hidden min-h-[85vh] flex items-center py-32">
     <!-- Background Image with Overlay -->
     <div class="absolute inset-0 z-0">
         <?php $hero_bg = get_theme_mod( 'ssmc_hero_bg_image', 'https://images.unsplash.com/photo-1541829070764-84a5d30cb273?q=80&w=2938&auto=format&fit=crop' ); ?>
@@ -17,32 +17,58 @@ get_header(); ?>
     </div>
     
     <div class="container mx-auto px-4 relative z-10">
-        <div class="max-w-5xl">
-            <?php if ( get_theme_mod( 'ssmc_hero_badge_text', 'Shaping the future since 1980' ) ) : ?>
-            <div class="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-8">
-                <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
-                <span class="text-xs font-black tracking-[0.3em] text-blue-50 uppercase"><?php echo esc_html( get_theme_mod( 'ssmc_hero_badge_text', 'Shaping the future since 1980' ) ); ?></span>
+        <div class="flex flex-col lg:flex-row items-center gap-16">
+            <div class="lg:w-3/5">
+                <?php if ( get_theme_mod( 'ssmc_hero_badge_text', 'Shaping the future since 1980' ) ) : ?>
+                <div class="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-8">
+                    <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
+                    <span id="hero-badge" class="text-xs font-black tracking-[0.3em] text-blue-50 uppercase"><?php echo esc_html( get_theme_mod( 'ssmc_hero_badge_text', 'Shaping the future since 1980' ) ); ?></span>
+                </div>
+                <?php endif; ?>
+                
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[0.85] tracking-tighter mb-10">
+                    <span id="hero-headline-1"><?php echo esc_html( get_theme_mod( 'ssmc_hero_headline_1', 'Empowering' ) ); ?></span><br/>
+                    <span id="hero-headline-2" class="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-yellow-200 to-white">
+                        <?php echo esc_html( get_theme_mod( 'ssmc_hero_headline_2', "Chitwan's Future" ) ); ?>
+                    </span>
+                </h1>
+                
+                <p id="hero-description" class="text-lg md:text-xl text-blue-100/70 max-w-2xl font-light leading-relaxed mb-12 border-l-4 border-secondary pl-8">
+                    <?php echo esc_html( get_theme_mod( 'ssmc_hero_description', 'Established in 1980 AD, Shaheed Smriti Multiple Campus stands as a beacon of academic excellence, nurturing leaders through accessible, high-quality higher education in Nepal.' ) ); ?>
+                </p>
+                
+                <div class="flex flex-wrap gap-6">
+                    <a id="hero-btn1" href="<?php echo esc_url( get_theme_mod( 'ssmc_hero_btn1_url', '#programs' ) ); ?>" class="px-10 py-5 bg-secondary text-primary font-black rounded-2xl hover:bg-yellow-400 transition-all duration-500 uppercase text-xs tracking-widest shadow-xl shadow-secondary/20">
+                        <?php echo esc_html( get_theme_mod( 'ssmc_hero_btn1_text', 'Explore Programs' ) ); ?>
+                    </a>
+                    <a id="hero-btn2" href="<?php echo esc_url( get_theme_mod( 'ssmc_hero_btn2_url', '#news' ) ); ?>" class="px-10 py-5 bg-white/10 text-white border border-white/20 font-black rounded-2xl hover:bg-white/20 transition-all duration-500 uppercase text-xs tracking-widest backdrop-blur-sm">
+                        <?php echo esc_html( get_theme_mod( 'ssmc_hero_btn2_text', 'Latest News' ) ); ?>
+                    </a>
+                </div>
             </div>
-            <?php endif; ?>
-            
-            <h1 class="text-6xl md:text-8xl lg:text-9xl font-black text-white leading-[0.85] tracking-tighter mb-10">
-                <?php echo esc_html( get_theme_mod( 'ssmc_hero_headline_1', 'Empowering' ) ); ?><br/>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-yellow-200 to-white">
-                    <?php echo esc_html( get_theme_mod( 'ssmc_hero_headline_2', "Chitwan's Future" ) ); ?>
-                </span>
-            </h1>
-            
-            <p class="text-xl md:text-2xl text-blue-100/70 max-w-2xl font-light leading-relaxed mb-12 border-l-4 border-secondary pl-8">
-                <?php echo esc_html( get_theme_mod( 'ssmc_hero_description', 'Established in 1980 AD, Shaheed Smriti Multiple Campus stands as a beacon of academic excellence, nurturing leaders through accessible, high-quality higher education in Nepal.' ) ); ?>
-            </p>
-            
-            <div class="flex flex-wrap gap-6">
-                <a href="#programs" class="px-10 py-5 bg-secondary text-primary font-black rounded-2xl hover:bg-yellow-400 transition-all duration-500 uppercase text-xs tracking-widest shadow-xl shadow-secondary/20">
-                    Explore Programs
-                </a>
-                <a href="#news" class="px-10 py-5 bg-white/10 text-white border border-white/20 font-black rounded-2xl hover:bg-white/20 transition-all duration-500 uppercase text-xs tracking-widest backdrop-blur-sm">
-                    Latest News
-                </a>
+
+            <!-- New Image Column -->
+            <div class="lg:w-2/5 relative animate-fade-in-right">
+                <div class="relative z-10 drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)] transform hover:scale-105 transition-transform duration-700">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/graduating-students.png" alt="SSMC Graduates" class="w-full h-auto rounded-[3rem] border-8 border-white/5 backdrop-blur-sm grayscale-[30%] hover:grayscale-0 transition duration-700">
+                    
+                    <!-- Floating Badge on image -->
+                    <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-3xl shadow-2xl hidden md:block border border-gray-100">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.827a1 1 0 00-.788 0l-7 3a1 1 0 000 1.848l7 3a1 1 0 00.788 0l7-3a1 1 0 000-1.848l-7-3zM14 11.596V13a1 1 0 01-.553.894l-3 1.5a1 1 0 01-.894 0l-3-1.5A1 1 0 016 13V11.596l4 2 4-2z"></path></svg>
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Community Pillar</div>
+                                <div class="text-sm font-black text-primary uppercase tracking-tighter">Academic Excellence</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decorative elements behind image -->
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-secondary/10 rounded-full blur-[100px] -z-10 animate-pulse"></div>
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -z-10 tracking-widest"></div>
             </div>
         </div>
     </div>
@@ -66,54 +92,73 @@ get_header(); ?>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <!-- Left Half: Chairman -->
-            <div class="group relative bg-gray-50 rounded-[3rem] p-10 md:p-16 overflow-hidden border border-gray-100 flex flex-col md:flex-row gap-8 items-center md:items-start text-center md:text-left hover:bg-primary transition-all duration-500 shadow-xl shadow-gray-100/50">
-                <div class="w-48 h-48 shrink-0 rounded-3xl overflow-hidden shadow-2xl border-4 border-white group-hover:border-secondary transition-colors">
-                    <img src="https://ui-avatars.com/api/?name=Uttam+Acharya&size=400&background=1e3a8a&color=fff" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500" alt="Uttam Acharya">
+            <div class="group relative bg-white rounded-[2.5rem] p-10 md:p-14 overflow-hidden border border-gray-100 flex flex-col md:flex-row gap-10 items-center md:items-start text-center md:text-left hover:shadow-[0_40px_80px_-15px_rgba(30,58,138,0.1)] transition-all duration-700">
+                <div class="w-52 h-52 shrink-0 rounded-[1.5rem] overflow-hidden shadow-xl border-4 border-white group-hover:border-secondary/50 transition-all duration-700 transform group-hover:scale-105">
+                    <?php $chairman_img = get_theme_mod('ssmc_chairman_img', 'https://ui-avatars.com/api/?name=Uttam+Acharya&size=400&background=1e3a8a&color=fff'); ?>
+                    <img id="leadership-img-1" src="<?php echo esc_url($chairman_img); ?>" class="w-full h-full object-cover transition duration-700" alt="Chairman Photo">
                 </div>
-                <div>
-                    <span class="text-[10px] font-black text-primary group-hover:text-secondary uppercase tracking-[0.3em] mb-4 block">Campus Chairman</span>
-                    <h4 class="text-3xl font-black text-gray-900 group-hover:text-white mb-6 uppercase tracking-tighter">Uttam Acharya</h4>
-                    <p class="text-gray-500 group-hover:text-blue-100/70 font-light italic leading-relaxed text-lg">
-                        "As Chairman, my commitment is to ensure SSMC remains a top-tier institution that serves the community and empowers every student to reach their peak potential."
+                <div class="relative z-10">
+                    <div class="text-primary text-[10px] font-black uppercase tracking-[0.3em] mb-2">Campus Chairman</div>
+                    <h4 id="leadership-name-1" class="text-3xl font-black text-gray-900 mb-6 uppercase tracking-tighter leading-none"><?php echo esc_html(get_theme_mod('ssmc_chairman_name', 'Uttam Acharya')); ?></h4>
+                    <p id="leadership-quote-1" class="text-gray-600 font-light italic leading-relaxed text-lg relative">
+                        <span class="text-4xl text-primary/10 absolute -top-4 -left-6 font-serif leading-none italic">“</span>
+                        <?php echo esc_html(get_theme_mod('ssmc_chairman_quote', '"As Chairman, my commitment is to ensure SSMC remains a top-tier institution that serves the community and empowers every student to reach their peak potential."')); ?>
                     </p>
                 </div>
-                <!-- Quote Icon -->
-                <div class="absolute top-10 right-10 text-6xl text-gray-100 group-hover:text-white/5 font-black hidden lg:block">“</div>
+                
+                <!-- Decorative background elements -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-1000"></div>
             </div>
 
             <!-- Right Half: Campus Chief -->
-            <div class="group relative bg-gray-50 rounded-[3rem] p-10 md:p-16 overflow-hidden border border-gray-100 flex flex-col md:flex-row gap-8 items-center md:items-start text-center md:text-left hover:bg-primary transition-all duration-500 shadow-xl shadow-gray-100/50">
-                <div class="w-48 h-48 shrink-0 rounded-3xl overflow-hidden shadow-2xl border-4 border-white group-hover:border-secondary transition-colors">
-                    <img src="https://ui-avatars.com/api/?name=Dharma+Datta+Tiwari&size=400&background=fa-cc-15&color=1e3a8a" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500" alt="Dr. Dharma Datta Tiwari">
+            <div class="group relative bg-white rounded-[2.5rem] p-10 md:p-14 overflow-hidden border border-gray-100 flex flex-col md:flex-row gap-10 items-center md:items-start text-center md:text-left hover:shadow-[0_40px_80px_-15px_rgba(30,58,138,0.1)] transition-all duration-700">
+                <div class="w-52 h-52 shrink-0 rounded-[1.5rem] overflow-hidden shadow-xl border-4 border-white group-hover:border-secondary/50 transition-all duration-700 transform group-hover:scale-105">
+                    <?php $chief_img = get_theme_mod('ssmc_chief_img', 'https://ui-avatars.com/api/?name=Dharma+Datta+Tiwari&size=400&background=fa-cc-15&color=1e3a8a'); ?>
+                    <img id="leadership-img-2" src="<?php echo esc_url($chief_img); ?>" class="w-full h-full object-cover transition duration-700" alt="Campus Chief Photo">
                 </div>
-                <div>
-                    <span class="text-[10px] font-black text-primary group-hover:text-secondary uppercase tracking-[0.3em] mb-4 block">Campus Chief</span>
-                    <h4 class="text-3xl font-black text-gray-900 group-hover:text-white mb-6 uppercase tracking-tighter">Dr. Dharma Datta Tiwari</h4>
-                    <p class="text-gray-500 group-hover:text-blue-100/70 font-light italic leading-relaxed text-lg">
-                        "Fostering an intellectually stimulating environment where local community support meets global academic standards is our core mission."
+                <div class="relative z-10">
+                    <div class="text-primary text-[10px] font-black uppercase tracking-[0.3em] mb-2">Campus Chief</div>
+                    <h4 id="leadership-name-2" class="text-3xl font-black text-gray-900 mb-6 uppercase tracking-tighter leading-none"><?php echo esc_html(get_theme_mod('ssmc_chief_name', 'Dr. Dharma Datta Tiwari')); ?></h4>
+                    <p id="leadership-quote-2" class="text-gray-600 font-light italic leading-relaxed text-lg relative">
+                        <span class="text-4xl text-primary/10 absolute -top-4 -left-6 font-serif leading-none italic">“</span>
+                        <?php echo esc_html(get_theme_mod('ssmc_chief_quote', '"Fostering an intellectually stimulating environment where local community support meets global academic standards is our core mission."')); ?>
                     </p>
                 </div>
-                <!-- Quote Icon -->
-                <div class="absolute top-10 right-10 text-6xl text-gray-100 group-hover:text-white/5 font-black hidden lg:block">“</div>
+
+                <!-- Decorative background elements -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-1000"></div>
             </div>
         </div>
 
-        <!-- Campus Introduction (Following leadership or integrated) -->
-        <div class="mt-24 max-w-5xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
-            <div class="lg:w-1/2">
-                <div class="relative rounded-[2.5rem] overflow-hidden shadow-2xl border-8 border-gray-50">
-                    <img src="https://images.unsplash.com/photo-1523050853063-bd42da225e01?q=80&w=2000&auto=format&fit=crop" class="w-full h-auto" alt="SSMC Campus">
+        <!-- Campus Introduction -->
+        <div class="mt-24 max-w-5xl mx-auto flex flex-col lg:flex-row gap-16 lg:items-stretch">
+            <div class="lg:w-1/2 flex">
+                <div class="w-full relative rounded-[2.5rem] overflow-hidden shadow-2xl border-8 border-gray-50 transform hover:scale-[1.02] transition-transform duration-700 min-h-[350px]">
+                    <?php $intro_img = get_theme_mod('ssmc_intro_img', 'https://images.unsplash.com/photo-1523050853063-bd42da225e01?q=80&w=2000&auto=format&fit=crop'); ?>
+                    <img src="<?php echo esc_url($intro_img); ?>" class="absolute inset-0 w-full h-full object-cover" alt="SSMC Campus">
                 </div>
             </div>
-            <div class="lg:w-1/2">
-                <h2 class="text-xs font-black text-primary uppercase tracking-[0.3em] mb-6">Introduction</h2>
-                <h3 class="text-4xl font-black text-gray-900 mb-8 leading-tight">Empowering Educational Hub of Ratnanagar</h3>
-                <p class="text-gray-600 font-light text-lg leading-relaxed mb-10">
-                    Shaheed Smriti Multiple Campus (SSMC) stands as a proud community-based institution. Affiliated with Tribhuvan University, we have spent four decades nurturing the intellectual and professional growth of Chitwan's youth.
+            <div class="lg:w-1/2 flex flex-col justify-center py-6 lg:py-0">
+                <div class="text-primary text-[10px] font-black uppercase tracking-[0.3em] mb-4">
+                    <span id="intro-badge"><?php echo esc_html( get_theme_mod( 'ssmc_intro_badge', 'Welcome to SSMC' ) ); ?></span>
+                </div>
+                <h3 id="intro-title" class="text-4xl font-black text-gray-900 mb-8 leading-tight tracking-tighter uppercase">
+                    <?php echo esc_html( get_theme_mod( 'ssmc_intro_title', 'Empowering Educational Hub of Ratnanagar' ) ); ?>
+                </h3>
+                <p id="intro-desc" class="text-gray-600 font-light text-lg leading-relaxed mb-10">
+                    <?php echo esc_html( get_theme_mod( 'ssmc_intro_desc', 'Shaheed Smriti Multiple Campus (SSMC) stands as a proud community-based institution. Affiliated with Tribhuvan University, we have spent four decades nurturing the intellectual and professional growth of Chitwan\'s youth.' ) ); ?>
                 </p>
-                <a href="<?php echo esc_url( home_url('/about-us') ); ?>" class="inline-flex py-4 px-8 border-2 border-primary text-primary font-black rounded-xl hover:bg-primary hover:text-white transition-all text-xs uppercase tracking-widest">
-                    Learn Our History
-                </a>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 rounded-3xl bg-gray-50 border border-gray-100 hover:border-secondary transition-colors duration-500">
+                        <h4 id="intro-feat1-title" class="text-sm font-black text-gray-900 mb-1 uppercase tracking-tight"><?php echo esc_html( get_theme_mod( 'ssmc_intro_feat1_title', 'Community-Led' ) ); ?></h4>
+                        <p id="intro-feat1-text" class="text-gray-500 font-light text-xs"><?php echo esc_html( get_theme_mod( 'ssmc_intro_feat1_text', 'Owned and operated by the community.' ) ); ?></p>
+                    </div>
+                    <div class="p-6 rounded-3xl bg-gray-50 border border-gray-100 hover:border-secondary transition-colors duration-500">
+                        <h4 id="intro-feat2-title" class="text-sm font-black text-gray-900 mb-1 uppercase tracking-tight"><?php echo esc_html( get_theme_mod( 'ssmc_intro_feat2_title', 'Quality Education' ) ); ?></h4>
+                        <p id="intro-feat2-text" class="text-gray-500 font-light text-xs"><?php echo esc_html( get_theme_mod( 'ssmc_intro_feat2_text', 'UGC accredited institution.' ) ); ?></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
