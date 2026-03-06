@@ -224,6 +224,21 @@ add_action( 'wp_update_nav_menu_item', 'ssmc_custom_nav_update', 10, 3 );
 require get_template_directory() . '/inc/custom-post-types.php';
 
 /**
+ * Require Committee Meta Boxes
+ */
+require get_template_directory() . '/inc/committee-meta-boxes.php';
+
+/**
+ * Require Committee Shortcode
+ */
+require get_template_directory() . '/inc/committee-shortcode.php';
+
+/**
+ * Require Journal Meta Boxes
+ */
+require get_template_directory() . '/inc/journal-meta-boxes.php';
+
+/**
  * Require Custom Tailwind Nav Walker
  */
 require get_template_directory() . '/inc/class-tailwind-nav-walker.php';

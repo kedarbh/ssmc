@@ -49,21 +49,36 @@
   /* News Ticker Animation */
   @keyframes ticker {
     0% {
-      transform: translateX(100%);
+      transform: translateX(0);
     }
 
     100% {
-      transform: translateX(-100%);
+      transform: translateX(-50%);
     }
   }
 
   .animate-ticker {
-    animation: ticker 25s linear infinite;
-    display: inline-flex;
-    white-space: nowrap;
+    animation: ticker 30s linear infinite;
+    display: flex;
+    width: max-content;
   }
 
   .animate-ticker:hover {
     animation-play-state: paused;
+  }
+
+  /* Global Gutenberg File Block Styling */
+  .wp-block-file {
+    @apply flex flex-col md:flex-row items-center justify-between gap-4 p-4 md:p-6 bg-blue-50/50 border border-blue-100/50 rounded-2xl mb-8;
+  }
+
+  /* Target the file name link specifically */
+  .wp-block-file>a:not(.wp-block-file__button) {
+    @apply text-lg font-bold text-gray-900 no-underline hover:text-primary transition-colors duration-200;
+  }
+
+  /* Target the download button with high specificity to override typography plugin */
+  div .wp-block-file a.wp-block-file__button {
+    @apply inline-flex items-center justify-center !bg-primary !text-white font-black px-6 py-3 rounded-xl transition-all duration-300 whitespace-nowrap shadow-lg shadow-primary/20 text-xs uppercase tracking-widest leading-none no-underline border-none hover:bg-secondary hover: !text-primary hover:shadow-secondary/30;
   }
 }

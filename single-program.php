@@ -45,7 +45,17 @@ $dept_name = ( $depts && ! is_wp_error( $depts ) ) ? $depts[0]->name : 'Program'
                     </div>
                 <?php endif; ?>
 
-                <div class="prose prose-blue max-w-none text-gray-700 leading-relaxed font-light prose-headings:font-extrabold prose-headings:text-gray-900 prose-p:mb-6">
+                <div class="text-gray-700 leading-[1.8] font-normal
+                            [&_h1]:text-4xl [&_h1]:font-black [&_h1]:text-gray-900 [&_h1]:mt-12 [&_h1]:mb-6
+                            [&_h2]:text-3xl [&_h2]:font-black [&_h2]:text-gray-900 [&_h2]:mt-10 [&_h2]:mb-6
+                            [&_h3]:text-2xl [&_h3]:font-black [&_h3]:text-gray-900 [&_h3]:mt-8 [&_h3]:mb-4
+                            [&_h4]:text-xl [&_h4]:font-black [&_h4]:text-gray-900 [&_h4]:mt-6 [&_h4]:mb-4
+                            [&_p]:mb-6 
+                            [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6 [&_li]:mb-2
+                            [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-6 
+                            [&_a]:text-primary [&_a]:font-bold [&_a]:underline hover:[&_a]:text-secondary hover:[&_a]:no-underline
+                            [&_strong]:text-gray-900 [&_strong]:font-bold
+                            [&_blockquote]:border-l-4 [&_blockquote]:border-primary/20 [&_blockquote]:pl-6 [&_blockquote]:italic [&_blockquote]:text-gray-600 [&_blockquote]:my-8">
                     <?php the_content(); ?>
                 </div>
             </article>
@@ -64,7 +74,11 @@ $dept_name = ( $depts && ! is_wp_error( $depts ) ) ? $depts[0]->name : 'Program'
                         </li>
                         <li class="flex gap-3 items-center">
                             <span class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-lg">📅</span> 
-                            <span>4-Year Duration</span>
+                            <?php 
+                                $program_title = get_the_title();
+                                $duration = ( stripos( $program_title, 'Master' ) !== false || stripos( $program_title, 'MBS' ) !== false ) ? '2-Year' : '4-Year';
+                            ?>
+                            <span><?php echo esc_html( $duration ); ?> Duration</span>
                         </li>
                         <li class="flex gap-3 items-center">
                             <span class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-lg">🏛️</span> 

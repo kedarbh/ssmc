@@ -36,7 +36,7 @@ get_header();
         <div class="flex flex-col lg:flex-row items-center gap-16">
             <div class="lg:w-1/2 relative">
                 <div class="relative z-10 rounded-3xl overflow-hidden shadow-2xl border-8 border-gray-50">
-                    <img src="https://images.unsplash.com/photo-1523050853063-bd42da225e01?q=80&w=2000&auto=format&fit=crop" alt="SSMC History" class="w-full h-auto">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/nepali_campus.png' ); ?>" alt="SSMC History" class="w-full h-auto">
                 </div>
                 <!-- Decorative element -->
                 <div class="absolute -top-10 -left-10 w-40 h-40 bg-secondary/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
