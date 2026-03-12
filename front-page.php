@@ -221,29 +221,39 @@ get_header(); ?>
 </section>
 
 <section id="news" class="py-24 bg-white relative overflow-hidden">
-    <!-- Background accents -->
     <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-50"></div>
     <div class="absolute top-1/4 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-x-1/2 pointer-events-none"></div>
 
-    <div class="container mx-auto px-4 relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+    <?php
+    $news_cat = get_category_by_slug('news');
+    $news_archive = $news_cat ? get_category_link($news_cat->term_id) : home_url('/');
+    ?>
 
-            <!-- Left: News (Standard Posts) -->
-            <div class="flex flex-col h-full">
-                <div class="flex justify-between items-end mb-10 border-b border-gray-100 pb-6 uppercase">
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
+            <!-- News -->
+            <div class="flex flex-col h-full rounded-3xl border border-gray-100 bg-white/90 p-6 lg:p-7 shadow-[0_12px_40px_rgba(15,23,42,0.08)]">
+                <div class="flex items-end justify-between border-b border-gray-100 pb-5 min-h-[92px]">
                     <div>
-                        <h2 class="text-[10px] font-black text-primary tracking-[0.4em] mb-3 flex items-center gap-2">
-                            <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-                            Pulse of Campus
-                        </h2>
-                        <h3 class="text-3xl font-black text-gray-900 tracking-tighter">Latest News</h3>
+                        <p class="text-[10px] font-black text-primary tracking-[0.35em] uppercase flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                            Campus Pulse
+                        </p>
+                        <h3 class="text-3xl font-black text-gray-900 tracking-tight leading-tight mt-2">Latest News</h3>
                     </div>
+                    <a href="<?php echo esc_url($news_archive); ?>" class="text-[10px] font-black text-primary hover:text-secondary transition tracking-widest uppercase flex items-center gap-1">
+                        View All
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </a>
                 </div>
 
-                <div class="flex flex-col flex-1 gap-6">
+                <div class="mt-6 flex flex-col gap-5 flex-1">
                     <?php
                     $news_query = new WP_Query(array(
                         'post_type'      => 'post',
+                        'category_name'  => 'news',
                         'posts_per_page' => 3,
                         'no_found_rows'  => true,
                     ));
@@ -252,132 +262,122 @@ get_header(); ?>
                         $count = 0;
                         while ($news_query->have_posts()) : $news_query->the_post();
                             if ($count === 0) :
-                                // Featured News
                     ?>
-                                <a href="<?php the_permalink(); ?>" class="group relative block w-full h-64 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500">
-                                    <?php if (has_post_thumbnail()) : ?>
-                                        <?php the_post_thumbnail('large', array('class' => 'absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700')); ?>
-                                    <?php else: ?>
-                                        <div class="absolute inset-0 bg-gray-200"></div>
-                                    <?php endif; ?>
-                                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                    <div class="absolute bottom-0 left-0 p-6 w-full text-left">
-                                        <span class="inline-block bg-primary text-white text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-sm mb-3 shadow-[0_4px_10px_rgba(30,58,138,0.5)]">Featured</span>
-                                        <h4 class="text-xl font-black text-white line-clamp-2 leading-tight drop-shadow-md group-hover:text-blue-100 transition-colors"><?php the_title(); ?></h4>
-                                        <p class="text-gray-300 text-xs mt-3 font-medium flex items-center gap-2 opacity-80">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
-                                            <?php echo get_the_date('F d, Y'); ?>
-                                        </p>
+                                <a href="<?php the_permalink(); ?>" class="group relative block w-full rounded-2xl overflow-hidden border border-gray-100 bg-gray-900/5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500">
+                                    <div class="aspect-[16/9] overflow-hidden">
+                                        <?php if (has_post_thumbnail()) : ?>
+                                            <?php the_post_thumbnail('large', array('class' => 'w-full h-full object-cover group-hover:scale-110 transition duration-700')); ?>
+                                        <?php else : ?>
+                                            <div class="w-full h-full bg-gradient-to-br from-primary to-blue-900"></div>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/85 via-gray-900/25 to-transparent"></div>
+                                    <div class="absolute bottom-0 left-0 p-5 w-full">
+                                        <span class="inline-flex items-center gap-1 rounded-full bg-white/25 px-2.5 py-1 text-[9px] font-black uppercase tracking-widest text-white">
+                                            Featured
+                                        </span>
+                                        <h4 class="mt-3 text-lg font-black text-white line-clamp-2 leading-snug"><?php the_title(); ?></h4>
+                                        <p class="text-blue-100/80 text-[10px] font-bold uppercase tracking-widest mt-2"><?php echo get_the_date('F d, Y'); ?></p>
                                     </div>
                                 </a>
-                                <div class="space-y-2 mt-2">
+                                <div class="space-y-3">
                                 <?php
                             else :
-                                // Regular News List
                                 ?>
-                                    <a href="<?php the_permalink(); ?>" class="group flex items-center gap-5 hover:bg-gray-50 p-4 -mx-4 rounded-2xl transition-colors duration-300">
+                                    <a href="<?php the_permalink(); ?>" class="group flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
                                         <?php if (has_post_thumbnail()) : ?>
-                                            <div class="w-20 h-20 shrink-0 rounded-[1rem] overflow-hidden shadow-sm">
+                                            <div class="w-16 h-16 shrink-0 rounded-xl overflow-hidden">
                                                 <?php the_post_thumbnail('thumbnail', array('class' => 'w-full h-full object-cover group-hover:scale-110 transition duration-500')); ?>
                                             </div>
-                                        <?php else: ?>
-                                            <div class="w-20 h-20 shrink-0 rounded-[1rem] bg-gray-100 border border-gray-200"></div>
+                                        <?php else : ?>
+                                            <div class="w-16 h-16 shrink-0 rounded-xl bg-gray-100 border border-gray-200"></div>
                                         <?php endif; ?>
-                                        <div class="flex-1 min-w-0 pb-1">
-                                            <p class="text-gray-400 text-[9px] uppercase font-bold tracking-[0.2em] mb-1.5"><?php echo get_the_date('M d, Y'); ?></p>
-                                            <h4 class="text-sm font-bold text-gray-800 group-hover:text-primary transition-colors line-clamp-2 leading-[1.4]"><?php the_title(); ?></h4>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-gray-400 text-[9px] uppercase font-bold tracking-[0.2em] mb-1"><?php echo get_the_date('M d, Y'); ?></p>
+                                            <h4 class="text-sm font-bold text-gray-800 group-hover:text-primary transition-colors line-clamp-2 leading-snug"><?php the_title(); ?></h4>
                                         </div>
                                     </a>
                         <?php
                             endif;
                             $count++;
                         endwhile;
-                        echo '</div>'; // close space-y-2
+                        echo '</div>';
                         wp_reset_postdata();
                     else :
-                        echo '<div class="text-center py-10 bg-gray-50 rounded-3xl border border-gray-100 border-dashed"><p class="text-gray-400 text-sm italic">Stay tuned for official news...</p></div>';
+                        echo '<div class="text-center py-10 bg-gray-50 rounded-2xl border border-dashed border-gray-200"><p class="text-gray-400 text-sm italic">Stay tuned for official news...</p></div>';
                     endif;
                         ?>
                                 </div>
                 </div>
 
-                <!-- Middle: Notices -->
-                <div class="h-full">
-                    <div class="bg-gray-50 rounded-[2.5rem] p-8 lg:p-10 h-full border border-gray-100 shadow-[inset_0_4px_24px_rgba(0,0,0,0.02)] relative overflow-hidden group">
-                        <!-- Decorative texture -->
-                        <div class="absolute top-0 right-0 w-48 h-48 bg-secondary/15 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 group-hover:bg-primary/10 transition duration-700 pointer-events-none"></div>
-
-                        <div class="flex justify-between items-end mb-10 relative z-10 border-b border-gray-200/60 pb-6 uppercase">
-                            <div>
-                                <h2 class="text-[10px] font-black text-secondary tracking-[0.4em] mb-3 flex items-center gap-2">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
-                                    Official
-                                </h2>
-                                <h3 class="text-3xl font-black text-gray-900 tracking-tighter">Notices</h3>
-                            </div>
-                            <a href="<?php echo esc_url(get_post_type_archive_link('notice')); ?>" class="text-[10px] font-black text-primary hover:text-secondary mb-1 transition tracking-widest flex items-center gap-1 group/link">
-                                View All <svg class="w-3.5 h-3.5 transform group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                </svg>
-                            </a>
-                        </div>
-
-                        <div class="space-y-4 relative z-10">
-                            <?php
-                            $notices_query = new WP_Query(array(
-                                'post_type'      => 'notice',
-                                'posts_per_page' => 4,
-                                'no_found_rows'  => true,
-                            ));
-
-                            if ($notices_query->have_posts()) :
-                                while ($notices_query->have_posts()) : $notices_query->the_post();
-                            ?>
-                                    <a href="<?php the_permalink(); ?>" class="group/notice flex items-center gap-5 p-4 bg-white rounded-2xl shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 border border-transparent hover:border-gray-200 hover:-translate-y-1">
-                                        <div class="shrink-0 flex flex-col items-center justify-center w-14 h-14 bg-gray-50 rounded-[1rem] border border-gray-100 group-hover/notice:bg-primary group-hover/notice:border-primary transition-colors duration-300 shadow-inner">
-                                            <span class="text-xl font-black text-gray-900 group-hover/notice:text-white leading-none tracking-tighter"><?php echo get_the_date('d'); ?></span>
-                                            <span class="text-[9px] font-bold text-gray-400 group-hover/notice:text-white/80 uppercase tracking-widest mt-0.5"><?php echo get_the_date('M'); ?></span>
-                                        </div>
-                                        <div class="flex-1 min-w-0 pr-2">
-                                            <h4 class="text-sm font-bold text-gray-800 group-hover/notice:text-primary transition-colors line-clamp-2 leading-[1.4]"><?php the_title(); ?></h4>
-                                            <div class="text-[9px] text-gray-400 font-bold uppercase tracking-wider mt-2.5 flex items-center gap-1.5 opacity-0 group-hover/notice:opacity-100 transform -translate-x-2 group-hover/notice:translate-x-0 transition-all duration-300">
-                                                Read Notice <svg class="w-3 h-3 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </a>
-                            <?php
-                                endwhile;
-                                wp_reset_postdata();
-                            else :
-                                echo '<div class="text-center py-10 bg-white rounded-2xl border border-gray-100"><p class="text-gray-400 text-sm italic">No recent notices...</p></div>';
-                            endif;
-                            ?>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right: Upcoming Events -->
-                <div class="flex flex-col h-full pl-0 lg:pl-6">
-                    <div class="flex justify-between items-end mb-10 border-b border-gray-100 pb-6 uppercase">
+                <!-- Notices -->
+                <div class="flex flex-col h-full rounded-3xl border border-gray-100 bg-white/90 p-6 lg:p-7 shadow-[0_12px_40px_rgba(15,23,42,0.08)]">
+                    <div class="flex items-end justify-between border-b border-gray-100 pb-5 min-h-[92px]">
                         <div>
-                            <h2 class="text-[10px] font-black text-blue-600 tracking-[0.4em] mb-3 flex items-center gap-2">
-                                <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
-                                Don't Miss Out
-                            </h2>
-                            <h3 class="text-3xl font-black text-gray-900 tracking-tighter">Events</h3>
+                            <p class="text-[10px] font-black text-secondary tracking-[0.35em] uppercase flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                                Official
+                            </p>
+                            <h3 class="text-3xl font-black text-gray-900 tracking-tight leading-tight mt-2">Notices</h3>
                         </div>
-                        <a href="<?php echo esc_url(get_post_type_archive_link('event')); ?>" class="text-[10px] font-black text-primary hover:text-secondary mb-1 transition tracking-widest flex items-center gap-1 group/link">
-                            View All <svg class="w-3.5 h-3.5 transform group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <a href="<?php echo esc_url(get_post_type_archive_link('notice')); ?>" class="text-[10px] font-black text-primary hover:text-secondary transition tracking-widest uppercase flex items-center gap-1">
+                            View All
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                             </svg>
                         </a>
                     </div>
 
-                    <div class="relative pl-6 space-y-10 before:absolute before:inset-y-0 before:left-2 before:-ml-px before:w-0.5 before:bg-gradient-to-b before:from-gray-200 before:via-gray-200 before:to-transparent pt-2">
+                    <div class="mt-6 space-y-4">
+                        <?php
+                        $notices_query = new WP_Query(array(
+                            'post_type'      => 'notice',
+                            'posts_per_page' => 4,
+                            'no_found_rows'  => true,
+                        ));
+
+                        if ($notices_query->have_posts()) :
+                            while ($notices_query->have_posts()) : $notices_query->the_post();
+                        ?>
+                                <a href="<?php the_permalink(); ?>" class="group flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+                                    <div class="shrink-0 flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-secondary/10 text-secondary border border-secondary/20">
+                                        <span class="text-lg font-black leading-none"><?php echo get_the_date('d'); ?></span>
+                                        <span class="text-[9px] font-black uppercase tracking-widest"><?php echo get_the_date('M'); ?></span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="text-sm font-bold text-gray-800 group-hover:text-primary transition-colors line-clamp-2 leading-snug"><?php the_title(); ?></h4>
+                                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-2">Read Notice</p>
+                                    </div>
+                                </a>
+                        <?php
+                            endwhile;
+                            wp_reset_postdata();
+                        else :
+                            echo '<div class="text-center py-10 bg-gray-50 rounded-2xl border border-dashed border-gray-200"><p class="text-gray-400 text-sm italic">No recent notices...</p></div>';
+                        endif;
+                        ?>
+                    </div>
+                </div>
+
+                <!-- Events -->
+                <div class="flex flex-col h-full rounded-3xl border border-gray-100 bg-white/90 p-6 lg:p-7 shadow-[0_12px_40px_rgba(15,23,42,0.08)]">
+                    <div class="flex items-end justify-between border-b border-gray-100 pb-5 min-h-[92px]">
+                        <div>
+                            <p class="text-[10px] font-black text-blue-600 tracking-[0.35em] uppercase flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                                Don't Miss Out
+                            </p>
+                            <h3 class="text-3xl font-black text-gray-900 tracking-tight leading-tight mt-2">Events</h3>
+                        </div>
+                        <a href="<?php echo esc_url(get_post_type_archive_link('event')); ?>" class="text-[10px] font-black text-primary hover:text-secondary transition tracking-widest uppercase flex items-center gap-1">
+                            View All
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <div class="mt-6 space-y-4">
                         <?php
                         $events_query = new WP_Query(array(
                             'post_type'      => 'event',
@@ -386,41 +386,28 @@ get_header(); ?>
                         ));
 
                         if ($events_query->have_posts()) :
-                            $colors = ['text-secondary', 'text-primary', 'text-blue-500'];
-                            $bg_colors = ['bg-secondary', 'bg-primary', 'bg-blue-500'];
-                            $i = 0;
                             while ($events_query->have_posts()) : $events_query->the_post();
-                                $color_class = $colors[$i % count($colors)];
-                                $bg_class = $bg_colors[$i % count($bg_colors)];
                         ?>
-                                <a href="<?php the_permalink(); ?>" class="relative flex flex-col gap-2 group block hover:-translate-y-1 transition-transform duration-300">
-                                    <span class="absolute -left-[2.05rem] top-1.5 flex h-4 w-4 items-center justify-center">
-                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full <?php echo $bg_class; ?> opacity-20"></span>
-                                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 <?php echo $bg_class; ?> ring-4 ring-white shadow-sm"></span>
-                                    </span>
-
-                                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 group-hover:shadow-xl group-hover:border-gray-200 transition-all duration-300 relative z-10">
-                                        <span class="text-[9px] font-black <?php echo $color_class; ?> uppercase tracking-[0.2em] mb-2 block flex items-center gap-1.5">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                            </svg>
-                                            <?php echo get_the_date('F d, Y'); ?>
-                                        </span>
-                                        <h4 class="text-lg font-black text-gray-900 group-hover:text-primary transition-colors tracking-tight mb-2 leading-[1.3]"><?php the_title(); ?></h4>
-                                        <p class="text-gray-500 font-medium text-xs leading-relaxed line-clamp-2"><?php echo wp_trim_words(get_the_excerpt(), 15); ?></p>
+                                <a href="<?php the_permalink(); ?>" class="group flex items-start gap-4 rounded-2xl border border-gray-100 bg-white p-4 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+                                    <div class="shrink-0 rounded-2xl bg-primary/10 text-primary border border-primary/20 px-3 py-2 text-center">
+                                        <div class="text-lg font-black leading-none"><?php echo get_the_date('d'); ?></div>
+                                        <div class="text-[9px] font-black uppercase tracking-widest"><?php echo get_the_date('M'); ?></div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-[9px] font-black text-primary/70 uppercase tracking-[0.2em] mb-1"><?php echo get_the_date('F d, Y'); ?></p>
+                                        <h4 class="text-sm font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-2 leading-snug"><?php the_title(); ?></h4>
+                                        <p class="text-xs text-gray-500 mt-2 line-clamp-2"><?php echo wp_trim_words(get_the_excerpt(), 14); ?></p>
                                     </div>
                                 </a>
                         <?php
-                                $i++;
                             endwhile;
                             wp_reset_postdata();
                         else :
-                            echo '<div class="text-center py-10"><p class="text-gray-400 text-sm italic">Stay tuned for exciting events...</p></div>';
+                            echo '<div class="text-center py-10 bg-gray-50 rounded-2xl border border-dashed border-gray-200"><p class="text-gray-400 text-sm italic">Stay tuned for exciting events...</p></div>';
                         endif;
                         ?>
                     </div>
                 </div>
-
             </div>
         </div>
 </section>

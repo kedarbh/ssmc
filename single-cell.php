@@ -89,7 +89,7 @@ get_header(); ?>
                         <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full group-hover:scale-110 transition duration-700"></div>
                         <h3 class="text-2xl font-black mb-6 uppercase tracking-tight relative z-10">Get Involved</h3>
                         <p class="text-blue-100/70 text-sm font-light mb-8 relative z-10">Interested in joining this cell or seeking support? Reach out to the administration office.</p>
-                        <a href="<?php echo esc_url(home_url('/contact-us')); ?>" class="block w-full py-4 bg-secondary text-primary text-center font-black rounded-xl hover:bg-yellow-400 transition-all uppercase text-[10px] tracking-widest relative z-10">
+                        <a href="<?php echo esc_url(home_url('/contact')); ?>" class="block w-full py-4 bg-secondary text-primary text-center font-black rounded-xl hover:bg-yellow-400 transition-all uppercase text-[10px] tracking-widest relative z-10">
                             Contact Us
                         </a>
                     </div>

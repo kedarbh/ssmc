@@ -39,7 +39,7 @@ class Tailwind_Nav_Walker extends Walker_Nav_Menu {
             $hl_link_url = get_post_meta( $item_id, '_mega_menu_highlight_link_url', true ) ?: '#';
 
 			// Smarter Mega Menu: Align to the right of the parent item for a more "connected" feel
-				$classes = 'sub-menu absolute right-0 top-full z-50 invisible w-[min(900px,calc(100vw-2rem))] overflow-hidden rounded-b-2xl rounded-t-none border border-t-0 border-gray-100/50 bg-white/95 backdrop-blur-md shadow-2xl flex opacity-0 origin-top scale-95 pointer-events-none transition-all duration-300 ease-out group-hover:visible group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100 group-focus-within:scale-100 group-focus-within:pointer-events-auto';
+				$classes = 'sub-menu absolute left-1/2 top-full z-50 invisible w-[min(900px,calc(100vw-2rem))] max-w-[calc(100vw-2rem)] -translate-x-1/2 overflow-hidden rounded-b-2xl rounded-t-none border border-t-0 border-gray-100/50 bg-white/95 backdrop-blur-md shadow-2xl flex opacity-0 origin-top scale-95 pointer-events-none transition-all duration-300 ease-out group-hover:visible group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100 group-focus-within:scale-100 group-focus-within:pointer-events-auto';
 			
 			$output .= "\n$indent<div class=\"" . esc_attr( $classes ) . "\">\n";
 

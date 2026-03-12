@@ -62,6 +62,67 @@ $dept_name = ( $depts && ! is_wp_error( $depts ) ) ? $depts[0]->name : 'Program'
 
             <!-- Sidebar -->
             <aside class="lg:w-80 flex-shrink-0 space-y-6">
+
+                <?php 
+                // Query for the assigned Coordinator
+                $coordinator_query = new WP_Query(array(
+                    'post_type'      => 'faculty',
+                    'posts_per_page' => 1,
+                    'post_status'    => 'publish',
+                    'meta_query'     => array(
+                        'relation' => 'AND',
+                        array(
+                            'key'   => '_ssmc_faculty_is_coordinator',
+                            'value' => '1',
+                        ),
+                        array(
+                            'key'     => '_ssmc_faculty_coordinator_programs',
+                            'value'   => sprintf('i:%s;', get_the_ID()), // Search for serialized integer ID in array
+                            'compare' => 'LIKE',
+                        )
+                    )
+                ));
+
+                if ($coordinator_query->have_posts()) :
+                    while ($coordinator_query->have_posts()) : $coordinator_query->the_post();
+                        $coord_voice = get_post_meta(get_the_ID(), '_ssmc_faculty_coordinator_voice', true);
+                        $coord_designation = get_post_meta(get_the_ID(), '_ssmc_faculty_designation', true);
+                        $coord_img_url = get_the_post_thumbnail_url(get_the_ID(), 'medium');
+                        if (!$coord_img_url) {
+                            $coord_img_url = 'https://ui-avatars.com/api/?name=' . urlencode(get_the_title()) . '&background=0D8ABC&color=fff&size=150';
+                        }
+                ?>
+                    <!-- Coordinator Voice Widget -->
+                    <div class="bg-white rounded-2xl p-6 shadow-xl shadow-gray-200/50 border border-gray-100 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full pointer-events-none -translate-y-8 translate-x-8"></div>
+                        
+                        <div class="flex items-center gap-4 mb-5 relative z-10">
+                            <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-md flex-shrink-0">
+                                <img src="<?php echo esc_url($coord_img_url); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" class="w-full h-full object-cover" />
+                            </div>
+                            <div>
+                                <h4 class="font-extrabold text-gray-900 text-lg leading-tight mb-1"><?php the_title(); ?></h4>
+                                <span class="text-[10px] font-bold text-primary uppercase tracking-widest bg-primary/10 px-2 py-1 rounded-md"><?php echo esc_html($coord_designation ?: 'Coordinator'); ?></span>
+                            </div>
+                        </div>
+
+                        <?php if ($coord_voice) : ?>
+                            <div class="relative z-10 text-sm text-gray-600 italic leading-relaxed mb-5 pl-4 border-l-2 border-secondary">
+                                "<?php echo wp_kses_post($coord_voice); ?>"
+                            </div>
+                        <?php endif; ?>
+
+                        <a href="<?php the_permalink(); ?>" class="inline-flex items-center justify-center gap-2 w-full py-3 bg-gray-50 text-gray-700 text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-gray-100 transition-colors relative z-10">
+                            <span>View Profile</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                <?php 
+                    endwhile; 
+                    wp_reset_postdata();
+                endif; 
+                ?>
+
                 <!-- Quick Info Box -->
                 <div class="bg-gradient-to-br from-primary to-blue-900 text-white rounded-2xl p-8 shadow-xl shadow-primary/20 relative overflow-hidden group">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-bl-full pointer-events-none translate-x-4 -translate-y-4"></div>

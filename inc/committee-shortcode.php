@@ -94,13 +94,20 @@ function ssmc_committee_shortcode( $atts ) {
     ob_start();
     ?>
     <div class="not-prose ssmc-committee-grid my-8 bg-white rounded-[2rem] p-8 md:p-12 border border-gray-100 shadow-xl shadow-gray-200/30">
-        <div class="flex items-center gap-4 mb-10 pb-6 border-b border-gray-100">
-            <div class="w-12 h-12 bg-blue-50 text-blue-900 rounded-xl flex items-center justify-center shrink-0">
+        <div class="flex items-start gap-4 mb-10 pb-6 border-b border-gray-100">
+            <div class="w-12 h-12 bg-blue-50 text-blue-900 rounded-xl flex items-center justify-center shrink-0 mt-1">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
             </div>
-            <h3 class="text-3xl font-black text-gray-900 tracking-tight m-0">
-                <?php echo esc_html( $committee_term->name ); ?>
-            </h3>
+            <div>
+                <h3 class="text-3xl font-black text-gray-900 tracking-tight m-0">
+                    <?php echo esc_html( $committee_term->name ); ?>
+                </h3>
+                <?php if ( ! empty( $committee_term->description ) ) : ?>
+                    <div class="text-gray-600 mt-2 text-base leading-relaxed max-w-3xl">
+                        <?php echo wpautop( wp_kses_post( $committee_term->description ) ); ?>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

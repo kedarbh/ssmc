@@ -331,6 +331,43 @@ function ssmc_custom_register_post_types()
         'show_in_rest'          => true,
     );
     register_post_type('event', $event_args);
+
+    // 9. Publications CPT
+    $publication_labels = array(
+        'name'                  => _x('Publications', 'Post Type General Name', 'ssmc-custom'),
+        'singular_name'         => _x('Publication', 'Post Type Singular Name', 'ssmc-custom'),
+        'menu_name'             => __('Publications', 'ssmc-custom'),
+        'all_items'             => __('All Publications', 'ssmc-custom'),
+        'add_new_item'          => __('Add New Publication', 'ssmc-custom'),
+        'add_new'               => __('Add New', 'ssmc-custom'),
+        'new_item'              => __('New Publication', 'ssmc-custom'),
+        'edit_item'             => __('Edit Publication', 'ssmc-custom'),
+        'view_item'             => __('View Publication', 'ssmc-custom'),
+        'search_items'          => __('Search Publications', 'ssmc-custom'),
+        'not_found'             => __('No publications found', 'ssmc-custom'),
+    );
+    $publication_args = array(
+        'label'                 => __('Publication', 'ssmc-custom'),
+        'description'           => __('Categorized Publications & PDFs', 'ssmc-custom'),
+        'labels'                => $publication_labels,
+        'supports'              => array('title', 'excerpt'), // Title and short description
+        'hierarchical'          => false,
+        'public'                => true,
+        'show_ui'               => true,
+        'show_in_menu'          => true,
+        'menu_position'         => 9,
+        'menu_icon'             => 'dashicons-media-document',
+        'show_in_admin_bar'     => true,
+        'show_in_nav_menus'     => true,
+        'can_export'            => true,
+        'has_archive'           => 'publications',
+        'rewrite'               => array('slug' => 'publications'),
+        'exclude_from_search'   => false,
+        'publicly_queryable'    => true,
+        'capability_type'       => 'post',
+        'show_in_rest'          => false,
+    );
+    register_post_type('publication', $publication_args);
 }
 add_action('init', 'ssmc_custom_register_post_types', 0);
 
@@ -446,6 +483,33 @@ function ssmc_custom_register_taxonomies()
         'show_in_rest'      => true,
     );
     register_taxonomy('program_degree', array('program'), $degree_args);
+
+    // 5. Publication Categories
+    $pub_cat_labels = array(
+        'name'              => _x('Publication Categories', 'taxonomy general name', 'ssmc-custom'),
+        'singular_name'     => _x('Publication Category', 'taxonomy singular name', 'ssmc-custom'),
+        'search_items'      => __('Search Categories', 'ssmc-custom'),
+        'all_items'         => __('All Categories', 'ssmc-custom'),
+        'parent_item'       => __('Parent Category', 'ssmc-custom'),
+        'parent_item_colon' => __('Parent Category:', 'ssmc-custom'),
+        'edit_item'         => __('Edit Category', 'ssmc-custom'),
+        'update_item'       => __('Update Category', 'ssmc-custom'),
+        'add_new_item'      => __('Add New Category', 'ssmc-custom'),
+        'new_item_name'     => __('New Category Name', 'ssmc-custom'),
+        'menu_name'         => __('Publication Categories', 'ssmc-custom'),
+    );
+
+    $pub_cat_args = array(
+        'hierarchical'      => true,
+        'labels'            => $pub_cat_labels,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'show_in_nav_menus' => true,
+        'query_var'         => true,
+        'rewrite'           => array('slug' => 'publication-category'),
+        'show_in_rest'      => true,
+    );
+    register_taxonomy('publication_category', array('publication'), $pub_cat_args);
 }
 add_action('init', 'ssmc_custom_register_taxonomies', 0);
 
@@ -550,6 +614,11 @@ function ssmc_faculty_details_meta_box_callback($post)
     $email = get_post_meta($post->ID, '_ssmc_faculty_email', true);
     $phone = get_post_meta($post->ID, '_ssmc_faculty_phone', true);
     $qualifications = get_post_meta($post->ID, '_ssmc_faculty_qualifications', true);
+    
+    // Coordinator Fields
+    $is_coordinator = get_post_meta($post->ID, '_ssmc_faculty_is_coordinator', true);
+    $coordinator_voice = get_post_meta($post->ID, '_ssmc_faculty_coordinator_voice', true);
+    $coordinator_programs = get_post_meta($post->ID, '_ssmc_faculty_coordinator_programs', true) ?: array();
 
 ?>
     <div class="ssmc-meta-box-wrapper" style="padding: 10px 0;">
@@ -607,7 +676,112 @@ function ssmc_faculty_details_meta_box_callback($post)
             wp_editor($content, 'ssmcshortbioeditor', $settings);
             ?>
         </p>
+        <p style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd;">
+            <?php $resume_url = get_post_meta($post->ID, '_ssmc_faculty_resume_pdf_url', true); ?>
+            <label for="ssmc_faculty_resume_pdf_url" style="display:block; font-weight:bold; margin-bottom:10px;"><?php _e('Resume PDF (Optional)', 'ssmc-custom'); ?></label>
+            <input type="text" id="ssmc_faculty_resume_pdf_url" name="ssmc_faculty_resume_pdf_url" value="<?php echo esc_attr($resume_url); ?>" class="widefat" style="margin-bottom:10px;" />
+            <button type="button" id="ssmc_upload_resume_button" class="button button-secondary"><?php _e('Choose PDF from Media Library', 'ssmc-custom'); ?></button>
+            <p class="description"><?php _e('Upload or select a PDF file for the faculty member\'s resume.', 'ssmc-custom'); ?></p>
+        </p>
+
+        <!-- Coordinator Section -->
+        <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-left: 4px solid #0073aa; border-radius: 4px;">
+            <p style="margin-top: 0;">
+                <label>
+                    <input type="checkbox" id="ssmc_faculty_is_coordinator" name="ssmc_faculty_is_coordinator" value="1" <?php checked($is_coordinator, '1'); ?> />
+                    <strong style="font-size: 1.1em;"><?php _e('Is this faculty member a Program Coordinator?', 'ssmc-custom'); ?></strong>
+                </label>
+            </p>
+
+            <div id="ssmc_coordinator_fields" style="display: <?php echo ($is_coordinator == '1') ? 'block' : 'none'; ?>; margin-top: 20px;">
+                <p>
+                    <label for="ssmc_faculty_coordinator_programs" style="display:block; font-weight:bold; margin-bottom:5px;"><?php _e('Assigned Programs', 'ssmc-custom'); ?></label>
+                    <select id="ssmc_faculty_coordinator_programs" name="ssmc_faculty_coordinator_programs[]" class="widefat" multiple="multiple" style="height: 120px;">
+                        <?php
+                        $programs_query = new WP_Query(array(
+                            'post_type'      => 'program',
+                            'posts_per_page' => -1,
+                            'post_status'    => 'publish',
+                            'orderby'        => 'title',
+                            'order'          => 'ASC'
+                        ));
+                        if ($programs_query->have_posts()) {
+                            while ($programs_query->have_posts()) {
+                                $programs_query->the_post();
+                                $program_id = get_the_ID();
+                                $selected = in_array($program_id, $coordinator_programs) ? 'selected="selected"' : '';
+                                echo '<option value="' . esc_attr($program_id) . '" ' . $selected . '>' . esc_html(get_the_title()) . '</option>';
+                            }
+                            wp_reset_postdata();
+                        } else {
+                            echo '<option value="">' . __('No programs available', 'ssmc-custom') . '</option>';
+                        }
+                        ?>
+                    </select>
+                    <p class="description"><?php _e('Hold ⌘ (Mac) or Ctrl (Windows) to select multiple programs.', 'ssmc-custom'); ?></p>
+                </p>
+
+                <p style="margin-top: 20px;">
+                    <label for="ssmc_faculty_coordinator_voice" style="display:block; font-weight:bold; margin-bottom:5px;"><?php _e('Coordinator Voice', 'ssmc-custom'); ?></label>
+                    <textarea id="ssmc_faculty_coordinator_voice" name="ssmc_faculty_coordinator_voice" class="widefat" rows="6" placeholder="<?php _e('Write a short message (approx 250 words) from the coordinator...', 'ssmc-custom'); ?>"><?php echo esc_textarea($coordinator_voice); ?></textarea>
+                    <p class="description ssmc-word-count-display"><?php _e('Recommended length: maximum 250 words. Current count: ', 'ssmc-custom'); ?> <strong id="voice_word_count">0</strong></p>
+                </p>
+            </div>
+        </div>
+
     </div>
+    <script>
+        jQuery(document).ready(function($) {
+            var resume_frame;
+            $('#ssmc_upload_resume_button').on('click', function(e) {
+                e.preventDefault();
+                if (resume_frame) {
+                    resume_frame.open();
+                    return;
+                }
+                resume_frame = wp.media.frames.file_frame = wp.media({
+                    title: '<?php _e('Select Resume PDF', 'ssmc-custom'); ?>',
+                    button: {
+                        text: '<?php _e('Use this file', 'ssmc-custom'); ?>'
+                    },
+                    library: {
+                        type: 'application/pdf'
+                    },
+                    multiple: false
+                });
+                resume_frame.on('select', function() {
+                    var attachment = resume_frame.state().get('selection').first().toJSON();
+                    $('#ssmc_faculty_resume_pdf_url').val(attachment.url);
+                });
+                resume_frame.open();
+            });
+
+            // Toggle Coordinator Fields
+            $('#ssmc_faculty_is_coordinator').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#ssmc_coordinator_fields').slideDown();
+                } else {
+                    $('#ssmc_coordinator_fields').slideUp();
+                }
+            });
+
+            // Word Count for Coordinator Voice
+            function updateWordCount() {
+                var text = $('#ssmc_faculty_coordinator_voice').val().trim();
+                var count = text ? text.split(/\s+/).length : 0;
+                var $counter = $('#voice_word_count');
+                $counter.text(count);
+                if (count > 250) {
+                    $counter.css('color', 'red');
+                } else {
+                    $counter.css('color', 'inherit');
+                }
+            }
+            $('#ssmc_faculty_coordinator_voice').on('keyup change', updateWordCount);
+            updateWordCount(); // Init on load
+
+        });
+    </script>
 <?php
 }
 
@@ -637,6 +811,28 @@ function ssmc_save_faculty_details_meta_box_data($post_id)
         }
     }
 
+    if (isset($_POST['ssmc_faculty_resume_pdf_url'])) {
+        update_post_meta($post_id, '_ssmc_faculty_resume_pdf_url', esc_url_raw($_POST['ssmc_faculty_resume_pdf_url']));
+    }
+
+    // Save Coordinator Fields
+    if (isset($_POST['ssmc_faculty_is_coordinator'])) {
+        update_post_meta($post_id, '_ssmc_faculty_is_coordinator', '1');
+    } else {
+        update_post_meta($post_id, '_ssmc_faculty_is_coordinator', '0');
+    }
+
+    if (isset($_POST['ssmc_faculty_coordinator_voice'])) {
+        update_post_meta($post_id, '_ssmc_faculty_coordinator_voice', wp_kses_post($_POST['ssmc_faculty_coordinator_voice']));
+    }
+
+    if (isset($_POST['ssmc_faculty_coordinator_programs']) && is_array($_POST['ssmc_faculty_coordinator_programs'])) {
+        $programs = array_map('intval', $_POST['ssmc_faculty_coordinator_programs']);
+        update_post_meta($post_id, '_ssmc_faculty_coordinator_programs', $programs);
+    } else {
+        delete_post_meta($post_id, '_ssmc_faculty_coordinator_programs');
+    }
+
     // Save Selection to Taxonomy
     if (isset($_POST['ssmc_faculty_category'])) {
         $cat_id = intval($_POST['ssmc_faculty_category']);
@@ -646,12 +842,13 @@ function ssmc_save_faculty_details_meta_box_data($post_id)
 add_action('save_post', 'ssmc_save_faculty_details_meta_box_data');
 
 /**
- * Enqueue Media Scripts for Download CPT
+ * Enqueue Media Scripts for Download and Faculty CPTs
  */
 function ssmc_enqueue_download_media_scripts($hook)
 {
     global $post_type;
-    if ('download' === $post_type && ('post.php' === $hook || 'post-new.php' === $hook)) {
+    $allowed_post_types = array('download', 'faculty', 'publication');
+    if (in_array($post_type, $allowed_post_types) && ('post.php' === $hook || 'post-new.php' === $hook)) {
         wp_enqueue_media();
     }
 }
@@ -725,3 +922,76 @@ function ssmc_save_download_file_meta_box_data($post_id)
     }
 }
 add_action('save_post', 'ssmc_save_download_file_meta_box_data');
+
+/**
+ * Add Meta Box for Publication File
+ */
+function ssmc_add_publication_file_meta_box()
+{
+    add_meta_box(
+        'ssmc_publication_file',
+        __('Publication PDF File', 'ssmc-custom'),
+        'ssmc_publication_file_meta_box_callback',
+        'publication',
+        'normal',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'ssmc_add_publication_file_meta_box');
+
+function ssmc_publication_file_meta_box_callback($post)
+{
+    wp_nonce_field('ssmc_publication_file_nonce', 'ssmc_publication_file_nonce_field');
+    $file_url = get_post_meta($post->ID, '_ssmc_publication_file_url', true);
+?>
+    <div class="ssmc-meta-box-wrapper" style="padding: 10px 0;">
+        <p>
+            <label for="ssmc_publication_file_url" style="display:block; font-weight:bold; margin-bottom:10px;"><?php _e('Select or Upload PDF File', 'ssmc-custom'); ?></label>
+            <input type="text" id="ssmc_publication_file_url" name="ssmc_publication_file_url" value="<?php echo esc_attr($file_url); ?>" class="widefat" style="margin-bottom:10px;" />
+            <button type="button" id="ssmc_upload_publication_button" class="button button-secondary"><?php _e('Choose PDF from Media Library', 'ssmc-custom'); ?></button>
+        </p>
+        <p class="description"><?php _e('Upload the PDF file to be listed in the publications directory.', 'ssmc-custom'); ?></p>
+    </div>
+    <script>
+        jQuery(document).ready(function($) {
+            var pub_file_frame;
+            $('#ssmc_upload_publication_button').on('click', function(e) {
+                e.preventDefault();
+                if (pub_file_frame) {
+                    pub_file_frame.open();
+                    return;
+                }
+                pub_file_frame = wp.media.frames.file_frame = wp.media({
+                    title: '<?php _e('Select Publication PDF', 'ssmc-custom'); ?>',
+                    button: {
+                        text: '<?php _e('Use this file', 'ssmc-custom'); ?>'
+                    },
+                    library: {
+                        type: 'application/pdf'
+                    },
+                    multiple: false
+                });
+                pub_file_frame.on('select', function() {
+                    var attachment = pub_file_frame.state().get('selection').first().toJSON();
+                    $('#ssmc_publication_file_url').val(attachment.url);
+                });
+                pub_file_frame.open();
+            });
+        });
+    </script>
+<?php
+}
+
+function ssmc_save_publication_file_meta_box_data($post_id)
+{
+    if (! isset($_POST['ssmc_publication_file_nonce_field'])) return;
+    if (! wp_verify_nonce($_POST['ssmc_publication_file_nonce_field'], 'ssmc_publication_file_nonce')) return;
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (! current_user_can('edit_post', $post_id)) return;
+
+    if (isset($_POST['ssmc_publication_file_url'])) {
+        update_post_meta($post_id, '_ssmc_publication_file_url', esc_url_raw($_POST['ssmc_publication_file_url']));
+    }
+}
+add_action('save_post', 'ssmc_save_publication_file_meta_box_data');
+
